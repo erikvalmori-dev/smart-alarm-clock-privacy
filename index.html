@@ -1,581 +1,641 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Privacy Policy — Smart Alarm Clock</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-i18n="meta.title">Privacy Policy — Smart Alarm Clock</title>
+  <meta name="description" data-i18n-attr-content="meta.description" content="Privacy Policy di Smart Alarm Clock. Nessun dato personale raccolto, nessun account, nessun tracking. Tutti i dati restano sul tuo dispositivo." />
+  <link rel="icon" type="image/png" href="landing-assets/logo.png" />
+  <link rel="apple-touch-icon" href="landing-assets/logo.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
   <style>
     :root {
-      --purple: #7C6AF7;
-      --purple-light: #EDE9FF;
-      --purple-dark: #5547D4;
-      --orange: #F7A76A;
-      --bg: #FAFAF8;
-      --text: #1A1A2E;
-      --text-muted: #6B6B8A;
-      --border: #E8E8F0;
-      --card: #FFFFFF;
+      --bg: #0A0A0F;
+      --bg-soft: #12121E;
+      --surface: #1E1E2E;
+      --surface-hi: #2A2A3E;
+      --text: #FFFFFF;
+      --text-dim: #A0A0C0;
+      --text-muted: #4A4A6A;
+      --accent: #7C6AF7;
+      --accent-soft: rgba(124, 106, 247, 0.15);
+      --accent-glow: rgba(124, 106, 247, 0.4);
+      --warn: #F7A76A;
+      --border: #1E1E2E;
+      --radius: 16px;
+      --radius-lg: 24px;
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
     body {
-      font-family: 'DM Sans', sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: var(--bg);
       color: var(--text);
       line-height: 1.7;
-      font-size: 16px;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
     }
-
-    /* Language switcher */
-    .lang-bar {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(250,250,248,0.9);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      padding: 12px 24px;
-      display: flex;
-      justify-content: flex-end;
-      gap: 8px;
-    }
-
-    .lang-btn {
-      padding: 6px 16px;
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      background: transparent;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .lang-btn.active {
-      background: var(--purple);
-      border-color: var(--purple);
-      color: white;
-    }
-
-    /* Hero */
-    .hero {
-      background: linear-gradient(135deg, #0A0A0F 0%, #1A1040 50%, #0A0A0F 100%);
-      padding: 80px 24px 60px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
+    body::before {
       content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle at 30% 50%, rgba(124,106,247,0.15) 0%, transparent 50%),
-                  radial-gradient(circle at 70% 50%, rgba(247,167,106,0.1) 0%, transparent 50%);
-      pointer-events: none;
+      position: fixed; inset: 0;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(124, 106, 247, 0.12), transparent 40%),
+        radial-gradient(circle at 80% 60%, rgba(124, 106, 247, 0.08), transparent 50%);
+      pointer-events: none; z-index: -1;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 920px; margin: 0 auto; padding: 0 24px; }
+
+    /* ===== NAV ===== */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(10, 10, 15, 0.7);
+      border-bottom: 1px solid var(--border);
+    }
+    nav .container {
+      max-width: 1200px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 24px;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; color: var(--text); }
+    .logo:hover { text-decoration: none; }
+    .logo-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      object-fit: cover;
+      box-shadow: 0 4px 20px var(--accent-glow);
+    }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .lang-switch {
+      display: flex; background: var(--surface); border-radius: 10px; padding: 3px; gap: 2px;
+      border: 1px solid var(--surface-hi);
+    }
+    .lang-btn {
+      background: transparent; border: none; cursor: pointer;
+      color: var(--text-dim); padding: 6px 10px; border-radius: 8px;
+      font-family: inherit; font-size: 13px; font-weight: 600;
+      transition: background 0.2s, color 0.2s;
+    }
+    .lang-btn:hover { color: var(--text); }
+    .lang-btn.active { background: var(--accent); color: white; }
+    .nav-back {
+      color: var(--text-dim);
+      font-size: 14px; font-weight: 500;
+      padding: 8px 14px; border-radius: 10px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .nav-back:hover { color: var(--text); background: var(--surface); text-decoration: none; }
+
+    /* ===== HEADER ===== */
+    header.page-header {
+      padding: 80px 0 40px;
+      text-align: center;
+    }
+    .doc-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--accent-soft);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 6px 14px; border-radius: 999px;
+      font-size: 13px; font-weight: 600;
+      margin-bottom: 20px;
+    }
+    h1.doc-title {
+      font-size: clamp(36px, 5vw, 52px);
+      font-weight: 800; letter-spacing: -1.5px;
+      line-height: 1.1; margin-bottom: 12px;
+    }
+    h1.doc-title .accent {
+      background: linear-gradient(135deg, var(--accent) 0%, #B19FFF 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .doc-updated {
+      color: var(--text-dim); font-size: 15px;
     }
 
-    .app-icon {
-      width: 72px;
-      height: 72px;
-      background: linear-gradient(135deg, var(--purple), var(--purple-dark));
-      border-radius: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 20px;
-      font-size: 36px;
-      box-shadow: 0 8px 32px rgba(124,106,247,0.4);
+    /* ===== SUMMARY CARD ===== */
+    .summary {
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      margin: 40px 0 60px;
     }
-
-    .hero h1 {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(28px, 5vw, 42px);
-      color: #FFFFFF;
-      margin-bottom: 8px;
-      letter-spacing: -0.5px;
+    .summary h2 {
+      font-size: 14px; font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase; letter-spacing: 2px;
+      margin-bottom: 20px;
     }
-
-    .hero .subtitle {
-      color: rgba(255,255,255,0.5);
-      font-size: 14px;
-      font-weight: 400;
-    }
-
-    .hero .updated {
-      display: inline-block;
-      margin-top: 16px;
-      background: rgba(124,106,247,0.2);
-      border: 1px solid rgba(124,106,247,0.3);
-      color: #A89EFA;
-      padding: 6px 16px;
-      border-radius: 20px;
-      font-size: 13px;
-    }
-
-    /* Main content */
-    .container {
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 48px 24px 80px;
-    }
-
-    /* Summary cards */
     .summary-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 12px;
+      gap: 24px;
+    }
+    .summary-item { display: flex; align-items: center; gap: 14px; }
+    .summary-icon {
+      width: 40px; height: 40px;
+      background: var(--accent-soft);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .summary-item .label {
+      font-size: 12px; color: var(--text-dim);
+      text-transform: uppercase; letter-spacing: 1px;
+      font-weight: 600; margin-bottom: 2px;
+    }
+    .summary-item .value {
+      font-size: 15px; font-weight: 600; color: var(--text);
+    }
+
+    /* ===== CONTENT ===== */
+    article { padding-bottom: 80px; }
+    section.policy {
       margin-bottom: 48px;
     }
-
-    .summary-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 20px;
-      text-align: center;
+    section.policy h2 {
+      font-size: 24px; font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 16px;
+      display: flex; align-items: baseline; gap: 12px;
+      scroll-margin-top: 100px;
     }
-
-    .summary-card .icon {
-      font-size: 28px;
-      margin-bottom: 8px;
+    section.policy h2 .num {
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
     }
-
-    .summary-card .label {
-      font-size: 13px;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-
-    .summary-card .value {
-      font-size: 15px;
+    section.policy h3 {
+      font-size: 17px; font-weight: 700;
       color: var(--text);
-      font-weight: 600;
+      margin: 24px 0 8px;
+    }
+    section.policy p { color: var(--text-dim); margin-bottom: 14px; font-size: 16px; }
+    section.policy p strong { color: var(--text); font-weight: 600; }
+    section.policy ul {
+      list-style: none;
+      margin: 14px 0;
+    }
+    section.policy ul li {
+      display: flex; align-items: flex-start; gap: 12px;
+      color: var(--text-dim);
+      padding: 6px 0;
+      font-size: 16px;
+    }
+    section.policy ul li::before {
+      content: '✓';
+      color: var(--accent);
+      font-weight: 700;
+      flex-shrink: 0;
       margin-top: 2px;
     }
-
-    /* Sections */
-    .section {
-      margin-bottom: 40px;
+    section.policy ul.deny li::before { content: '✕'; color: var(--warn); }
+    section.policy code {
+      background: var(--surface);
+      color: var(--accent);
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: 'SF Mono', Menlo, monospace;
     }
-
-    .section-num {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 28px;
-      height: 28px;
-      background: var(--purple-light);
-      color: var(--purple);
+    section.policy .callout {
+      background: var(--bg-soft);
+      border-left: 3px solid var(--accent);
+      padding: 16px 20px;
       border-radius: 8px;
-      font-size: 13px;
-      font-weight: 700;
-      margin-right: 10px;
-      flex-shrink: 0;
-    }
-
-    .section h2 {
-      display: flex;
-      align-items: center;
-      font-family: 'DM Serif Display', serif;
-      font-size: 22px;
-      color: var(--text);
-      margin-bottom: 16px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .section p {
-      color: #3A3A5C;
-      margin-bottom: 12px;
-      font-size: 15px;
-    }
-
-    .section ul {
-      list-style: none;
-      margin: 12px 0;
-    }
-
-    .section ul li {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      padding: 8px 0;
-      color: #3A3A5C;
-      font-size: 15px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .section ul li:last-child { border-bottom: none; }
-
-    .section ul li::before {
-      content: '→';
-      color: var(--purple);
-      font-weight: 600;
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
-
-    /* Highlight box */
-    .highlight {
-      background: var(--purple-light);
-      border-left: 3px solid var(--purple);
-      border-radius: 0 12px 12px 0;
-      padding: 16px 20px;
       margin: 16px 0;
-      font-size: 15px;
-      color: var(--purple-dark);
+      color: var(--text-dim);
     }
+    section.policy .callout strong { color: var(--text); }
 
-    .highlight strong { color: var(--purple-dark); }
-
-    /* Warning box */
-    .warning {
-      background: #FFF8F0;
-      border-left: 3px solid var(--orange);
-      border-radius: 0 12px 12px 0;
-      padding: 16px 20px;
-      margin: 16px 0;
-      font-size: 15px;
-      color: #8B5A2B;
-    }
-
-    /* Contact card */
+    /* ===== CONTACT ===== */
     .contact-card {
-      background: linear-gradient(135deg, #0A0A0F, #1A1040);
-      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(124, 106, 247, 0.1) 0%, transparent 100%);
+      border: 1px solid var(--accent);
+      border-radius: var(--radius-lg);
       padding: 32px;
       text-align: center;
-      margin-top: 48px;
+      margin-top: 60px;
     }
-
-    .contact-card h3 {
-      font-family: 'DM Serif Display', serif;
-      color: white;
-      font-size: 22px;
+    .contact-card h2 {
+      font-size: 24px; font-weight: 700;
       margin-bottom: 8px;
     }
-
     .contact-card p {
-      color: rgba(255,255,255,0.5);
-      font-size: 14px;
+      color: var(--text-dim);
       margin-bottom: 20px;
     }
-
-    .contact-card a {
-      display: inline-block;
-      background: var(--purple);
-      color: white;
+    .contact-card .email-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--accent); color: white;
+      padding: 14px 24px; border-radius: 12px;
+      font-weight: 700; font-size: 16px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .contact-card .email-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px var(--accent-glow);
       text-decoration: none;
-      padding: 12px 28px;
-      border-radius: 24px;
-      font-weight: 600;
-      font-size: 15px;
-      transition: background 0.2s;
     }
 
-    .contact-card a:hover { background: var(--purple-dark); }
-
-    /* Footer */
+    /* ===== FOOTER ===== */
     footer {
-      text-align: center;
-      padding: 32px 24px;
       border-top: 1px solid var(--border);
+      padding: 40px 0;
       color: var(--text-muted);
-      font-size: 13px;
+      font-size: 14px;
+      text-align: center;
     }
+    footer a { color: var(--text-dim); margin: 0 12px; }
 
-    /* Language sections */
-    .lang-section { display: none; }
-    .lang-section.active { display: block; }
+    /* Language transition */
+    [data-i18n], [data-i18n-html] { transition: opacity 0.15s; }
+    body.lang-changing [data-i18n],
+    body.lang-changing [data-i18n-html] { opacity: 0.5; }
 
-    @media (max-width: 600px) {
-      .hero { padding: 60px 16px 48px; }
-      .container { padding: 32px 16px 60px; }
-      .summary-grid { grid-template-columns: repeat(2, 1fr); }
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      header.page-header { padding: 50px 0 24px; }
+      .summary { padding: 24px; margin: 30px 0 40px; }
+      .summary-grid { gap: 16px; }
+      section.policy { margin-bottom: 36px; }
+      section.policy h2 { font-size: 21px; }
+      nav .container { padding: 12px 16px; }
+      .nav-right { gap: 8px; }
+      .nav-back { padding: 6px 10px; font-size: 13px; }
+      .lang-btn { padding: 5px 8px; font-size: 12px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Language bar -->
-  <div class="lang-bar">
-    <button class="lang-btn active" onclick="setLang('it')">🇮🇹 Italiano</button>
-    <button class="lang-btn" onclick="setLang('en')">🇬🇧 English</button>
-  </div>
-
-  <!-- Hero -->
-  <div class="hero">
-    <div class="app-icon">⏰</div>
-    <h1>Smart Alarm Clock</h1>
-    <p class="subtitle">Privacy Policy</p>
-    <span class="updated" id="updated-label">Aggiornato: Marzo 2026</span>
-  </div>
-
-  <!-- ITALIANO -->
-  <div class="lang-section active" id="lang-it">
+  <nav>
     <div class="container">
-
-      <div class="summary-grid">
-        <div class="summary-card">
-          <div class="icon">🚫</div>
-          <div class="label">Dati personali raccolti</div>
-          <div class="value">Nessuno</div>
+      <a href="https://erikvalmori-dev.github.io/smart-alarm-clock-landing/" class="logo">
+        <img class="logo-icon" src="landing-assets/logo.png" alt="Smart Alarm Clock" />
+        Smart Alarm Clock
+      </a>
+      <div class="nav-right">
+        <div class="lang-switch" role="group" aria-label="Language switcher">
+          <button class="lang-btn active" data-lang="it" aria-label="Italiano">🇮🇹 IT</button>
+          <button class="lang-btn" data-lang="en" aria-label="English">🇬🇧 EN</button>
         </div>
-        <div class="summary-card">
-          <div class="icon">📡</div>
-          <div class="label">Dati condivisi con terzi</div>
-          <div class="value">Solo Google (festività)</div>
-        </div>
-        <div class="summary-card">
-          <div class="icon">💾</div>
-          <div class="label">Storage</div>
-          <div class="value">Solo locale</div>
-        </div>
-        <div class="summary-card">
-          <div class="icon">👤</div>
-          <div class="label">Account richiesto</div>
-          <div class="value">No</div>
-        </div>
+        <a href="https://erikvalmori-dev.github.io/smart-alarm-clock-landing/" class="nav-back" data-i18n="nav.back">← Torna al sito</a>
       </div>
-
-      <div class="section">
-        <h2><span class="section-num">1</span>Introduzione</h2>
-        <p>Benvenuto in <strong>Smart Alarm Clock</strong>. Questa Privacy Policy descrive come l'applicazione gestisce le informazioni degli utenti.</p>
-        <p>Smart Alarm Clock è sviluppata e gestita da Erik Valmori ("lo Sviluppatore", "noi"). Utilizzando l'app accetti le pratiche descritte in questa policy.</p>
-        <div class="highlight">
-          <strong>In sintesi:</strong> Smart Alarm Clock non raccoglie, non memorizza e non trasmette dati personali identificabili. Tutte le impostazioni vengono salvate localmente sul tuo dispositivo.
-        </div>
-      </div>
-
-      <div class="section">
-        <h2><span class="section-num">2</span>Dati raccolti</h2>
-        <p>Smart Alarm Clock <strong>non raccoglie dati personali</strong>. In particolare, l'app non raccoglie:</p>
-        <ul>
-          <li>Nome, email o altri dati identificativi</li>
-          <li>Dati di localizzazione</li>
-          <li>Dati del dispositivo o identificatori univoci</li>
-          <li>Dati di utilizzo o analytics</li>
-          <li>Dati biometrici</li>
-        </ul>
-        <p>Le impostazioni dell'app (sveglie, preferenze, festività personalizzate) sono salvate <strong>esclusivamente in locale</strong> sul dispositivo tramite AsyncStorage e non vengono mai trasmesse a server esterni.</p>
-      </div>
-
-      <div class="section">
-        <h2><span class="section-num">3</span>Servizi di terze parti</h2>
-        <p>L'app utilizza i seguenti servizi di terze parti:</p>
-        <ul>
-          <li><strong>Google Calendar API</strong> — per scaricare le festività nazionali dei paesi selezionati. La richiesta include solo il codice del paese e l'anno. Nessun dato personale viene trasmesso. Consulta la <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy di Google</a>.</li>
-          <li><strong>Google Play Billing</strong> — per gli acquisti in-app (Premium, Premium Plus). Le transazioni sono gestite da Google Play. Consulta la <a href="https://payments.google.com/payments/privacynotice" target="_blank">Privacy Policy di Google Payments</a>.</li>
-        </ul>
-      </div>
-
-      <div class="section">
-        <h2><span class="section-num">4</span>Permessi richiesti</h2>
-        <p>L'app richiede i seguenti permessi Android, tutti necessari per il funzionamento delle sveglie:</p>
-        <ul>
-          <li><strong>SCHEDULE_EXACT_ALARM / USE_EXACT_ALARM</strong> — per far suonare le sveglie all'orario esatto</li>
-          <li><strong>USE_FULL_SCREEN_INTENT</strong> — per mostrare la sveglia a schermo intero sulla lockscreen</li>
-          <li><strong>FOREGROUND_SERVICE</strong> — per mantenere il servizio sveglia attivo</li>
-          <li><strong>WAKE_LOCK</strong> — per accendere lo schermo all'arrivo della sveglia</li>
-          <li><strong>POST_NOTIFICATIONS</strong> — per mostrare la notifica sveglia</li>
-          <li><strong>INTERNET</strong> — per scaricare le festività da Google Calendar API</li>
-          <li><strong>RECEIVE_BOOT_COMPLETED</strong> — per ripristinare le sveglie dopo il riavvio del dispositivo</li>
-          <li><strong>REQUEST_IGNORE_BATTERY_OPTIMIZATIONS</strong> — per garantire il funzionamento con ottimizzazione batteria attiva</li>
-          <li><strong>VIBRATE</strong> — per la vibrazione all'arrivo della sveglia</li>
-        </ul>
-        <div class="warning">
-          Nessuno di questi permessi viene utilizzato per raccogliere o trasmettere dati personali.
-        </div>
-      </div>
-
-      <div class="section">
-        <h2><span class="section-num">5</span>Acquisti in-app</h2>
-        <p>Smart Alarm Clock offre acquisti in-app una tantum (Premium e Premium Plus). Questi acquisti sono elaborati da <strong>Google Play</strong>. Lo Sviluppatore non ha accesso ai dati della tua carta di credito o ai dati di pagamento.</p>
-        <p>Lo stato degli acquisti viene salvato localmente sul dispositivo e può essere ripristinato tramite la funzione "Ripristina acquisti" nell'app.</p>
-      </div>
-
-      <div class="section">
-        <h2><span class="section-num">6</span>Conservazione dei dati</h2>
-        <p>Tutti i dati dell'app (sveglie, impostazioni, festività personalizzate, cache festività) sono memorizzati <strong>solo sul dispositivo locale</strong> dell'utente. La disinstallazione dell'app elimina tutti questi dati.</p>
-      </div>
-
-      <div class="section">
-        <h2><span class="section-num">7</span>Minori</h2>
-        <p>Smart Alarm Clock non è destinata a minori di 13 anni e non raccoglie consapevolmente informazioni da minori. Se sei un genitore e ritieni che tuo figlio abbia fornito informazioni, contattaci all'indirizzo sottostante.</p>
-      </div>
-
-      <div class="section">
-        <h2><span class="section-num">8</span>Modifiche alla Privacy Policy</h2>
-        <p>Questa Privacy Policy potrebbe essere aggiornata periodicamente. In caso di modifiche significative, aggiorneremo la data in cima alla pagina. Ti invitiamo a consultare questa pagina periodicamente.</p>
-      </div>
-
-      <div class="section">
-        <h2><span class="section-num">9</span>Diritti dell'utente (GDPR)</h2>
-        <p>In conformità al Regolamento Europeo sulla protezione dei dati (GDPR), hai diritto a:</p>
-        <ul>
-          <li>Accedere ai tuoi dati personali (in questo caso non esistono)</li>
-          <li>Richiedere la cancellazione dei tuoi dati (disinstalla l'app)</li>
-          <li>Opporti al trattamento dei tuoi dati</li>
-          <li>Presentare reclamo all'Autorità Garante per la protezione dei dati personali</li>
-        </ul>
-      </div>
-
-      <div class="contact-card">
-        <h3>Hai domande?</h3>
-        <p>Per qualsiasi domanda sulla privacy, contattaci</p>
-        <a href="mailto:erikvalmori.dev@gmail.com">erikvalmori.dev@gmail.com</a>
-      </div>
-
     </div>
-  </div>
+  </nav>
 
-  <!-- ENGLISH -->
-  <div class="lang-section" id="lang-en">
-    <div class="container">
+  <header class="page-header container">
+    <span class="doc-badge" data-i18n="doc.badge">🔒 Documento legale</span>
+    <h1 class="doc-title" data-i18n-html="doc.title">Privacy <span class="accent">Policy</span></h1>
+    <p class="doc-updated" data-i18n="doc.updated">Ultimo aggiornamento: Marzo 2026</p>
+  </header>
 
+  <article class="container">
+
+    <!-- SUMMARY CARD -->
+    <div class="summary">
+      <h2 data-i18n="summary.title">In breve</h2>
       <div class="summary-grid">
-        <div class="summary-card">
-          <div class="icon">🚫</div>
-          <div class="label">Personal data collected</div>
-          <div class="value">None</div>
+        <div class="summary-item">
+          <div class="summary-icon">🚫</div>
+          <div>
+            <div class="label" data-i18n="summary.s1.label">Dati personali</div>
+            <div class="value" data-i18n="summary.s1.value">Nessuno raccolto</div>
+          </div>
         </div>
-        <div class="summary-card">
-          <div class="icon">📡</div>
-          <div class="label">Data shared with third parties</div>
-          <div class="value">Google (holidays only)</div>
+        <div class="summary-item">
+          <div class="summary-icon">📡</div>
+          <div>
+            <div class="label" data-i18n="summary.s2.label">Terze parti</div>
+            <div class="value" data-i18n="summary.s2.value">Solo Google (festività)</div>
+          </div>
         </div>
-        <div class="summary-card">
-          <div class="icon">💾</div>
-          <div class="label">Storage</div>
-          <div class="value">Local only</div>
+        <div class="summary-item">
+          <div class="summary-icon">💾</div>
+          <div>
+            <div class="label" data-i18n="summary.s3.label">Archiviazione</div>
+            <div class="value" data-i18n="summary.s3.value">Solo locale</div>
+          </div>
         </div>
-        <div class="summary-card">
-          <div class="icon">👤</div>
-          <div class="label">Account required</div>
-          <div class="value">No</div>
-        </div>
-      </div>
-
-      <div class="section">
-        <h2><span class="section-num">1</span>Introduction</h2>
-        <p>Welcome to <strong>Smart Alarm Clock</strong>. This Privacy Policy describes how the application handles user information.</p>
-        <p>Smart Alarm Clock is developed and maintained by Erik Valmori ("the Developer", "we"). By using the app, you agree to the practices described in this policy.</p>
-        <div class="highlight">
-          <strong>In short:</strong> Smart Alarm Clock does not collect, store, or transmit any personally identifiable data. All settings are saved locally on your device.
-        </div>
-      </div>
-
-      <div class="section">
-        <h2><span class="section-num">2</span>Data collected</h2>
-        <p>Smart Alarm Clock <strong>does not collect personal data</strong>. In particular, the app does not collect:</p>
-        <ul>
-          <li>Name, email, or other identifying data</li>
-          <li>Location data</li>
-          <li>Device data or unique identifiers</li>
-          <li>Usage data or analytics</li>
-          <li>Biometric data</li>
-        </ul>
-        <p>App settings (alarms, preferences, custom holidays) are saved <strong>exclusively locally</strong> on the device via AsyncStorage and are never transmitted to external servers.</p>
-      </div>
-
-      <div class="section">
-        <h2><span class="section-num">3</span>Third-party services</h2>
-        <p>The app uses the following third-party services:</p>
-        <ul>
-          <li><strong>Google Calendar API</strong> — to download national holidays for selected countries. The request includes only the country code and year. No personal data is transmitted. See <a href="https://policies.google.com/privacy" target="_blank">Google's Privacy Policy</a>.</li>
-          <li><strong>Google Play Billing</strong> — for in-app purchases (Premium, Premium Plus). Transactions are handled by Google Play. See <a href="https://payments.google.com/payments/privacynotice" target="_blank">Google Payments Privacy Policy</a>.</li>
-        </ul>
-      </div>
-
-      <div class="section">
-        <h2><span class="section-num">4</span>Permissions requested</h2>
-        <p>The app requests the following Android permissions, all necessary for alarm functionality:</p>
-        <ul>
-          <li><strong>SCHEDULE_EXACT_ALARM / USE_EXACT_ALARM</strong> — to trigger alarms at the exact scheduled time</li>
-          <li><strong>USE_FULL_SCREEN_INTENT</strong> — to show the alarm fullscreen on the lock screen</li>
-          <li><strong>FOREGROUND_SERVICE</strong> — to keep the alarm service running</li>
-          <li><strong>WAKE_LOCK</strong> — to wake the screen when an alarm fires</li>
-          <li><strong>POST_NOTIFICATIONS</strong> — to display the alarm notification</li>
-          <li><strong>INTERNET</strong> — to download holidays from the Google Calendar API</li>
-          <li><strong>RECEIVE_BOOT_COMPLETED</strong> — to restore alarms after device reboot</li>
-          <li><strong>REQUEST_IGNORE_BATTERY_OPTIMIZATIONS</strong> — to ensure alarms work with battery optimization enabled</li>
-          <li><strong>VIBRATE</strong> — for vibration when an alarm fires</li>
-        </ul>
-        <div class="warning">
-          None of these permissions are used to collect or transmit personal data.
+        <div class="summary-item">
+          <div class="summary-icon">👤</div>
+          <div>
+            <div class="label" data-i18n="summary.s4.label">Account</div>
+            <div class="value" data-i18n="summary.s4.value">Non richiesto</div>
+          </div>
         </div>
       </div>
-
-      <div class="section">
-        <h2><span class="section-num">5</span>In-app purchases</h2>
-        <p>Smart Alarm Clock offers one-time in-app purchases (Premium and Premium Plus). These purchases are processed by <strong>Google Play</strong>. The Developer does not have access to your credit card or payment data.</p>
-        <p>Purchase status is stored locally on the device and can be restored using the "Restore purchases" feature in the app.</p>
-      </div>
-
-      <div class="section">
-        <h2><span class="section-num">6</span>Data retention</h2>
-        <p>All app data (alarms, settings, custom holidays, holiday cache) is stored <strong>only on the user's local device</strong>. Uninstalling the app deletes all this data.</p>
-      </div>
-
-      <div class="section">
-        <h2><span class="section-num">7</span>Children</h2>
-        <p>Smart Alarm Clock is not intended for children under 13 and does not knowingly collect information from minors. If you are a parent and believe your child has provided information, please contact us at the address below.</p>
-      </div>
-
-      <div class="section">
-        <h2><span class="section-num">8</span>Changes to this Privacy Policy</h2>
-        <p>This Privacy Policy may be updated periodically. If significant changes are made, we will update the date at the top of the page. We encourage you to review this page periodically.</p>
-      </div>
-
-      <div class="section">
-        <h2><span class="section-num">9</span>Your rights (GDPR)</h2>
-        <p>In accordance with the European General Data Protection Regulation (GDPR), you have the right to:</p>
-        <ul>
-          <li>Access your personal data (in this case none exists)</li>
-          <li>Request deletion of your data (uninstall the app)</li>
-          <li>Object to the processing of your data</li>
-          <li>Lodge a complaint with the relevant data protection authority</li>
-        </ul>
-      </div>
-
-      <div class="contact-card">
-        <h3>Questions?</h3>
-        <p>For any privacy-related questions, contact us</p>
-        <a href="mailto:erikvalmori.dev@gmail.com">erikvalmori.dev@gmail.com</a>
-      </div>
-
     </div>
-  </div>
+
+    <!-- SECTIONS -->
+    <section class="policy">
+      <h2><span class="num">01</span><span data-i18n="s1.title">Introduzione</span></h2>
+      <p data-i18n="s1.p1">Smart Alarm Clock è creata e gestita da Erik Valmori. Utilizzando l'app accetti le pratiche di privacy descritte in questo documento.</p>
+      <p data-i18n="s1.p2">L'applicazione <strong>non raccoglie, non memorizza e non trasmette</strong> alcuna informazione personale identificabile. Tutte le impostazioni utente restano esclusivamente sul tuo dispositivo.</p>
+    </section>
+
+    <section class="policy">
+      <h2><span class="num">02</span><span data-i18n="s2.title">Dati raccolti</span></h2>
+      <p data-i18n="s2.p1">L'app <strong>non raccoglie esplicitamente</strong>:</p>
+      <ul class="deny">
+        <li data-i18n="s2.l1">Nomi, email o informazioni identificative</li>
+        <li data-i18n="s2.l2">Dati di geolocalizzazione</li>
+        <li data-i18n="s2.l3">Identificatori del dispositivo</li>
+        <li data-i18n="s2.l4">Analytics o telemetria d'uso</li>
+        <li data-i18n="s2.l5">Informazioni biometriche</li>
+      </ul>
+      <p data-i18n="s2.p2">Le configurazioni dell'app — comprese sveglie, preferenze e festività personalizzate — sono salvate localmente tramite AsyncStorage e non vengono mai inviate a server esterni.</p>
+    </section>
+
+    <section class="policy">
+      <h2><span class="num">03</span><span data-i18n="s3.title">Servizi di terze parti</span></h2>
+      <h3 data-i18n="s3.h1">Google Calendar API</h3>
+      <p data-i18n="s3.p1">Scarica le festività nazionali per i paesi selezionati. Le richieste contengono solo il codice paese e l'anno, senza alcun dato personale.</p>
+      <h3 data-i18n="s3.h2">Google Play Billing</h3>
+      <p data-i18n="s3.p2">Gestisce gli acquisti Premium e Premium Plus. Lo sviluppatore non ha accesso a numeri di carta o dettagli di pagamento.</p>
+    </section>
+
+    <section class="policy">
+      <h2><span class="num">04</span><span data-i18n="s4.title">Permessi Android richiesti</span></h2>
+      <p data-i18n="s4.p1">L'app richiede questi permessi unicamente per il funzionamento delle sveglie:</p>
+      <ul>
+        <li><code>SCHEDULE_EXACT_ALARM</code> / <code>USE_EXACT_ALARM</code></li>
+        <li><code>USE_FULL_SCREEN_INTENT</code></li>
+        <li><code>FOREGROUND_SERVICE</code></li>
+        <li><code>WAKE_LOCK</code></li>
+        <li><code>POST_NOTIFICATIONS</code></li>
+        <li><code>INTERNET</code></li>
+        <li><code>RECEIVE_BOOT_COMPLETED</code></li>
+        <li><code>REQUEST_IGNORE_BATTERY_OPTIMIZATIONS</code></li>
+        <li><code>VIBRATE</code></li>
+        <li><code>READ_MEDIA_AUDIO</code></li>
+      </ul>
+      <div class="callout" data-i18n="s4.callout">
+        <strong>Nessuno di questi permessi viene usato per raccogliere o trasmettere dati.</strong> Servono solo a far suonare la sveglia in modo affidabile.
+      </div>
+    </section>
+
+    <section class="policy">
+      <h2><span class="num">05</span><span data-i18n="s5.title">Acquisti in-app</span></h2>
+      <p data-i18n="s5.p1">Gli acquisti una tantum (Premium, Premium Plus) sono gestiti da Google Play. Lo stato dell'acquisto è memorizzato localmente e può essere ripristinato tramite la funzione <strong>"Ripristina acquisti"</strong> nell'app.</p>
+    </section>
+
+    <section class="policy">
+      <h2><span class="num">06</span><span data-i18n="s6.title">Conservazione dei dati</span></h2>
+      <p data-i18n="s6.p1">Tutti i dati dell'app — sveglie, impostazioni, festività personalizzate e cache — restano sul dispositivo locale. <strong>Disinstallando l'app, tutti i dati vengono rimossi.</strong></p>
+    </section>
+
+    <section class="policy">
+      <h2><span class="num">07</span><span data-i18n="s7.title">Minori</span></h2>
+      <p data-i18n="s7.p1">L'app non è destinata a utenti di età inferiore ai 13 anni. I genitori che sospettino che un minore abbia condiviso dati possono contattare lo sviluppatore.</p>
+    </section>
+
+    <section class="policy">
+      <h2><span class="num">08</span><span data-i18n="s8.title">Modifiche alla policy</span></h2>
+      <p data-i18n="s8.p1">Eventuali aggiornamenti saranno riflessi nella data in cima a questa pagina. Si raccomanda di consultare periodicamente questo documento.</p>
+    </section>
+
+    <section class="policy">
+      <h2><span class="num">09</span><span data-i18n="s9.title">Diritti GDPR</span></h2>
+      <p data-i18n="s9.p1">In quanto utente hai il diritto di:</p>
+      <ul>
+        <li data-i18n="s9.l1">Accedere ai tuoi dati personali</li>
+        <li data-i18n="s9.l2">Richiederne la cancellazione (tramite disinstallazione dell'app)</li>
+        <li data-i18n="s9.l3">Opporti al trattamento</li>
+        <li data-i18n="s9.l4">Presentare reclamo all'autorità di protezione dei dati competente</li>
+      </ul>
+    </section>
+
+    <!-- CONTACT -->
+    <div class="contact-card">
+      <h2 data-i18n="contact.title">Hai domande?</h2>
+      <p data-i18n="contact.desc">Per qualsiasi richiesta relativa a privacy e dati, scrivimi:</p>
+      <a href="mailto:erikvalmori.dev@gmail.com" class="email-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+        </svg>
+        erikvalmori.dev@gmail.com
+      </a>
+    </div>
+
+  </article>
 
   <footer>
-    <p>© 2026 Erik Valmori · Smart Alarm Clock · <span id="footer-lang">Tutti i diritti riservati</span></p>
+    <div class="container">
+      <p data-i18n="footer.copy">© 2026 Erik Valmori · Smart Alarm Clock · Tutti i diritti riservati</p>
+      <div style="margin-top: 12px;">
+        <a href="https://erikvalmori-dev.github.io/smart-alarm-clock-landing/" data-i18n="footer.home">Home</a>
+        ·
+        <a href="https://play.google.com/store/apps/details?id=com.svegliasmart" target="_blank" rel="noopener">Play Store</a>
+      </div>
+    </div>
   </footer>
 
   <script>
-    function setLang(lang) {
-      document.querySelectorAll('.lang-section').forEach(s => s.classList.remove('active'));
-      document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById('lang-' + lang).classList.add('active');
-      document.querySelector(`[onclick="setLang('${lang}')"]`).classList.add('active');
-      document.getElementById('updated-label').textContent =
-        lang === 'it' ? 'Aggiornato: Marzo 2026' : 'Last updated: March 2026';
-      document.getElementById('footer-lang').textContent =
-        lang === 'it' ? 'Tutti i diritti riservati' : 'All rights reserved';
+    const I18N = {
+      it: {
+        'meta.title': 'Privacy Policy — Smart Alarm Clock',
+        'meta.description': 'Privacy Policy di Smart Alarm Clock. Nessun dato personale raccolto, nessun account, nessun tracking. Tutti i dati restano sul tuo dispositivo.',
+
+        'nav.back': '← Torna al sito',
+
+        'doc.badge': '🔒 Documento legale',
+        'doc.title': 'Privacy <span class="accent">Policy</span>',
+        'doc.updated': 'Ultimo aggiornamento: Marzo 2026',
+
+        'summary.title': 'In breve',
+        'summary.s1.label': 'Dati personali',
+        'summary.s1.value': 'Nessuno raccolto',
+        'summary.s2.label': 'Terze parti',
+        'summary.s2.value': 'Solo Google (festività)',
+        'summary.s3.label': 'Archiviazione',
+        'summary.s3.value': 'Solo locale',
+        'summary.s4.label': 'Account',
+        'summary.s4.value': 'Non richiesto',
+
+        's1.title': 'Introduzione',
+        's1.p1': 'Smart Alarm Clock è creata e gestita da Erik Valmori. Utilizzando l\'app accetti le pratiche di privacy descritte in questo documento.',
+        's1.p2': 'L\'applicazione <strong>non raccoglie, non memorizza e non trasmette</strong> alcuna informazione personale identificabile. Tutte le impostazioni utente restano esclusivamente sul tuo dispositivo.',
+
+        's2.title': 'Dati raccolti',
+        's2.p1': 'L\'app <strong>non raccoglie esplicitamente</strong>:',
+        's2.l1': 'Nomi, email o informazioni identificative',
+        's2.l2': 'Dati di geolocalizzazione',
+        's2.l3': 'Identificatori del dispositivo',
+        's2.l4': 'Analytics o telemetria d\'uso',
+        's2.l5': 'Informazioni biometriche',
+        's2.p2': 'Le configurazioni dell\'app — comprese sveglie, preferenze e festività personalizzate — sono salvate localmente tramite AsyncStorage e non vengono mai inviate a server esterni.',
+
+        's3.title': 'Servizi di terze parti',
+        's3.h1': 'Google Calendar API',
+        's3.p1': 'Scarica le festività nazionali per i paesi selezionati. Le richieste contengono solo il codice paese e l\'anno, senza alcun dato personale.',
+        's3.h2': 'Google Play Billing',
+        's3.p2': 'Gestisce gli acquisti Premium e Premium Plus. Lo sviluppatore non ha accesso a numeri di carta o dettagli di pagamento.',
+
+        's4.title': 'Permessi Android richiesti',
+        's4.p1': 'L\'app richiede questi permessi unicamente per il funzionamento delle sveglie:',
+        's4.callout': '<strong>Nessuno di questi permessi viene usato per raccogliere o trasmettere dati.</strong> Servono solo a far suonare la sveglia in modo affidabile.',
+
+        's5.title': 'Acquisti in-app',
+        's5.p1': 'Gli acquisti una tantum (Premium, Premium Plus) sono gestiti da Google Play. Lo stato dell\'acquisto è memorizzato localmente e può essere ripristinato tramite la funzione <strong>"Ripristina acquisti"</strong> nell\'app.',
+
+        's6.title': 'Conservazione dei dati',
+        's6.p1': 'Tutti i dati dell\'app — sveglie, impostazioni, festività personalizzate e cache — restano sul dispositivo locale. <strong>Disinstallando l\'app, tutti i dati vengono rimossi.</strong>',
+
+        's7.title': 'Minori',
+        's7.p1': 'L\'app non è destinata a utenti di età inferiore ai 13 anni. I genitori che sospettino che un minore abbia condiviso dati possono contattare lo sviluppatore.',
+
+        's8.title': 'Modifiche alla policy',
+        's8.p1': 'Eventuali aggiornamenti saranno riflessi nella data in cima a questa pagina. Si raccomanda di consultare periodicamente questo documento.',
+
+        's9.title': 'Diritti GDPR',
+        's9.p1': 'In quanto utente hai il diritto di:',
+        's9.l1': 'Accedere ai tuoi dati personali',
+        's9.l2': 'Richiederne la cancellazione (tramite disinstallazione dell\'app)',
+        's9.l3': 'Opporti al trattamento',
+        's9.l4': 'Presentare reclamo all\'autorità di protezione dei dati competente',
+
+        'contact.title': 'Hai domande?',
+        'contact.desc': 'Per qualsiasi richiesta relativa a privacy e dati, scrivimi:',
+
+        'footer.copy': '© 2026 Erik Valmori · Smart Alarm Clock · Tutti i diritti riservati',
+        'footer.home': 'Home',
+      },
+      en: {
+        'meta.title': 'Privacy Policy — Smart Alarm Clock',
+        'meta.description': 'Smart Alarm Clock Privacy Policy. No personal data collected, no account, no tracking. All data stays on your device.',
+
+        'nav.back': '← Back to site',
+
+        'doc.badge': '🔒 Legal document',
+        'doc.title': 'Privacy <span class="accent">Policy</span>',
+        'doc.updated': 'Last updated: March 2026',
+
+        'summary.title': 'At a glance',
+        'summary.s1.label': 'Personal data',
+        'summary.s1.value': 'None collected',
+        'summary.s2.label': 'Third parties',
+        'summary.s2.value': 'Google only (holidays)',
+        'summary.s3.label': 'Storage',
+        'summary.s3.value': 'Local only',
+        'summary.s4.label': 'Account',
+        'summary.s4.value': 'Not required',
+
+        's1.title': 'Introduction',
+        's1.p1': 'Smart Alarm Clock is created and managed by Erik Valmori. By using the app you accept the privacy practices outlined in this document.',
+        's1.p2': 'The application <strong>does not collect, store or transmit</strong> any personally identifiable information. All user settings remain exclusively on your device.',
+
+        's2.title': 'Data collected',
+        's2.p1': 'The app <strong>explicitly does not collect</strong>:',
+        's2.l1': 'Names, emails or identifying information',
+        's2.l2': 'Location data',
+        's2.l3': 'Device identifiers',
+        's2.l4': 'Usage analytics or telemetry',
+        's2.l5': 'Biometric information',
+        's2.p2': 'App configurations — including alarms, preferences and custom holidays — are saved locally via AsyncStorage and are never sent to external servers.',
+
+        's3.title': 'Third-party services',
+        's3.h1': 'Google Calendar API',
+        's3.p1': 'Downloads national holidays for selected countries. Requests contain only country codes and year information, with no personal data transmission.',
+        's3.h2': 'Google Play Billing',
+        's3.p2': 'Processes Premium and Premium Plus purchases. The developer cannot access credit card numbers or payment details.',
+
+        's4.title': 'Android permissions requested',
+        's4.p1': 'The app requests these permissions exclusively to enable alarm functionality:',
+        's4.callout': '<strong>None of these permissions are used to collect or transmit data.</strong> They only ensure the alarm rings reliably.',
+
+        's5.title': 'In-app purchases',
+        's5.p1': 'One-time purchases (Premium, Premium Plus) are processed by Google Play. Purchase status is stored locally and can be restored via the <strong>"Restore purchases"</strong> feature in the app.',
+
+        's6.title': 'Data retention',
+        's6.p1': 'All app data — alarms, settings, custom holidays and caches — remains on the local device. <strong>Uninstalling the app removes all data.</strong>',
+
+        's7.title': 'Children',
+        's7.p1': 'The app is not intended for users under 13 years of age. Parents suspecting a minor has shared data should contact the developer.',
+
+        's8.title': 'Policy changes',
+        's8.p1': 'Updates will be reflected in the date shown at the top of this page. We recommend reviewing this document periodically.',
+
+        's9.title': 'GDPR rights',
+        's9.p1': 'As a user, you have the right to:',
+        's9.l1': 'Access your personal data',
+        's9.l2': 'Request its deletion (by uninstalling the app)',
+        's9.l3': 'Object to processing',
+        's9.l4': 'Lodge a complaint with the competent data protection authority',
+
+        'contact.title': 'Got questions?',
+        'contact.desc': 'For any privacy and data-related inquiry, write to me:',
+
+        'footer.copy': '© 2026 Erik Valmori · Smart Alarm Clock · All rights reserved',
+        'footer.home': 'Home',
+      },
+    };
+
+    function applyLanguage(lang) {
+      const dict = I18N[lang] || I18N.it;
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key] !== undefined) el.textContent = dict[key];
+      });
+      document.querySelectorAll('[data-i18n-html]').forEach(el => {
+        const key = el.getAttribute('data-i18n-html');
+        if (dict[key] !== undefined) el.innerHTML = dict[key];
+      });
+      document.querySelectorAll('*').forEach(el => {
+        for (const attr of el.attributes) {
+          const m = attr.name.match(/^data-i18n-attr-(.+)$/);
+          if (m && dict[attr.value] !== undefined) {
+            el.setAttribute(m[1], dict[attr.value]);
+          }
+        }
+      });
+      // Handle inline HTML in some keys (callout, p with strong)
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key] !== undefined && dict[key].includes('<strong>')) {
+          el.innerHTML = dict[key];
+        }
+      });
       document.documentElement.lang = lang;
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+      });
+      localStorage.setItem('preferred-lang', lang);
     }
 
-    // Auto-detect language
-    const userLang = navigator.language || navigator.userLanguage;
-    if (!userLang.startsWith('it')) setLang('en');
+    function detectLanguage() {
+      const saved = localStorage.getItem('preferred-lang');
+      if (saved && I18N[saved]) return saved;
+      const browser = (navigator.language || 'it').slice(0, 2).toLowerCase();
+      return I18N[browser] ? browser : 'it';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      applyLanguage(detectLanguage());
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.body.classList.add('lang-changing');
+          setTimeout(() => {
+            applyLanguage(btn.dataset.lang);
+            document.body.classList.remove('lang-changing');
+          }, 150);
+        });
+      });
+    });
   </script>
 
 </body>
