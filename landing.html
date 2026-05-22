@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-i18n="meta.title">Smart Alarm Clock — La sveglia che conosce le tue festività</title>
+  <meta name="description" data-i18n-attr-content="meta.description" content="Sveglia intelligente per Android con rilevamento automatico delle festività di 47 paesi. Niente account, niente cloud, solo la sveglia che funziona." />
+  <link rel="icon" type="image/png" href="landing-assets/logo.png" />
+  <link rel="apple-touch-icon" href="landing-assets/logo.png" />
+
+  <!-- Open Graph / social sharing -->
+  <meta property="og:title" data-i18n-attr-content="og.title" content="Smart Alarm Clock — La sveglia intelligente" />
+  <meta property="og:description" data-i18n-attr-content="og.description" content="Riconosce automaticamente le festività di 47 paesi e salta le sveglie nei giorni di festa. Niente account, niente cloud." />
+  <meta property="og:image" content="landing-assets/logo.png" />
+  <meta property="og:type" content="website" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #0A0A0F;
+      --bg-soft: #12121E;
+      --surface: #1E1E2E;
+      --surface-hi: #2A2A3E;
+      --text: #FFFFFF;
+      --text-dim: #A0A0C0;
+      --text-muted: #4A4A6A;
+      --accent: #7C6AF7;
+      --accent-soft: rgba(124, 106, 247, 0.15);
+      --accent-glow: rgba(124, 106, 247, 0.4);
+      --warn: #F7A76A;
+      --border: #1E1E2E;
+      --radius: 16px;
+      --radius-lg: 24px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(124, 106, 247, 0.15), transparent 40%),
+        radial-gradient(circle at 80% 60%, rgba(124, 106, 247, 0.10), transparent 50%);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    /* ===== NAV ===== */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(10, 10, 15, 0.7);
+      border-bottom: 1px solid var(--border);
+    }
+    nav .container {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 24px;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; }
+    .logo-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      object-fit: cover;
+      box-shadow: 0 4px 20px var(--accent-glow);
+    }
+    .logo-icon-lg {
+      width: 80px; height: 80px; border-radius: 20px;
+      object-fit: cover;
+      box-shadow: 0 8px 32px var(--accent-glow);
+    }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .lang-switch {
+      display: flex; background: var(--surface); border-radius: 10px; padding: 3px; gap: 2px;
+      border: 1px solid var(--surface-hi);
+    }
+    .lang-btn {
+      background: transparent; border: none; cursor: pointer;
+      color: var(--text-dim); padding: 6px 10px; border-radius: 8px;
+      font-family: inherit; font-size: 13px; font-weight: 600;
+      transition: background 0.2s, color 0.2s;
+    }
+    .lang-btn:hover { color: var(--text); }
+    .lang-btn.active {
+      background: var(--accent);
+      color: white;
+    }
+    .nav-cta {
+      background: var(--accent); color: white;
+      padding: 10px 20px; border-radius: 12px;
+      font-weight: 600; font-size: 14px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .nav-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px var(--accent-glow);
+      text-decoration: none;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      padding: 80px 0 100px;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 60px; align-items: center;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--accent-soft);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 6px 14px; border-radius: 999px;
+      font-size: 13px; font-weight: 600;
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 800; letter-spacing: -1.5px;
+      line-height: 1.1; margin-bottom: 20px;
+    }
+    .hero h1 .accent {
+      background: linear-gradient(135deg, var(--accent) 0%, #B19FFF 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero p.lead {
+      font-size: 20px;
+      color: var(--text-dim);
+      margin-bottom: 36px;
+      max-width: 480px;
+    }
+    .cta-row { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+    .btn-primary {
+      background: var(--accent); color: white;
+      padding: 16px 28px; border-radius: 14px;
+      font-weight: 700; font-size: 16px;
+      display: inline-flex; align-items: center; gap: 10px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px var(--accent-glow);
+      text-decoration: none;
+    }
+    .btn-secondary {
+      background: var(--surface); color: var(--text);
+      padding: 16px 28px; border-radius: 14px;
+      font-weight: 600; font-size: 16px;
+      border: 1px solid var(--surface-hi);
+      transition: background 0.2s;
+    }
+    .btn-secondary:hover { background: var(--surface-hi); text-decoration: none; }
+
+    /* Phone Mockup */
+    .phone-mockup {
+      position: relative; width: 320px; max-width: 100%;
+      margin: 0 auto; aspect-ratio: 9 / 19.5;
+      background: linear-gradient(135deg, #1E1E2E 0%, #0A0A0F 100%);
+      border-radius: 40px; border: 8px solid #2A2A3E;
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.05),
+        0 30px 60px rgba(0, 0, 0, 0.7),
+        0 0 80px var(--accent-glow);
+      padding: 24px 18px; overflow: hidden;
+    }
+    .phone-mockup::before {
+      content: ''; position: absolute;
+      top: 12px; left: 50%; transform: translateX(-50%);
+      width: 90px; height: 24px; background: #000;
+      border-radius: 999px;
+    }
+    .phone-content { margin-top: 30px; display: flex; flex-direction: column; gap: 14px; }
+    .phone-time { font-size: 64px; font-weight: 200; letter-spacing: -3px; text-align: center; margin: 20px 0 8px; }
+    .phone-date { text-align: center; color: var(--text-dim); font-size: 14px; margin-bottom: 24px; }
+    .alarm-card {
+      background: var(--surface); border-radius: var(--radius);
+      padding: 16px; border: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .alarm-time { font-size: 28px; font-weight: 300; letter-spacing: -1px; }
+    .alarm-label { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
+    .toggle {
+      width: 44px; height: 26px; background: var(--accent);
+      border-radius: 999px; position: relative;
+    }
+    .toggle::after {
+      content: ''; position: absolute;
+      top: 2px; right: 2px; width: 22px; height: 22px;
+      background: white; border-radius: 50%;
+    }
+    .toggle.off { background: var(--surface-hi); }
+    .toggle.off::after { right: auto; left: 2px; }
+    .holiday-pill {
+      background: rgba(247, 167, 106, 0.15); color: var(--warn);
+      font-size: 11px; padding: 3px 8px;
+      border-radius: 999px; font-weight: 600;
+    }
+
+    /* ===== STATS ===== */
+    .stats {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 24px; padding: 60px 0;
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    }
+    .stat { text-align: center; }
+    .stat-num {
+      font-size: 42px; font-weight: 800;
+      background: linear-gradient(135deg, var(--accent) 0%, #B19FFF 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -1px;
+    }
+    .stat-label { color: var(--text-dim); font-size: 14px; margin-top: 4px; }
+
+    /* ===== SECTIONS ===== */
+    section.block { padding: 100px 0; }
+    .section-head { text-align: center; max-width: 720px; margin: 0 auto 60px; }
+    .section-head .eyebrow {
+      color: var(--accent); font-weight: 600; font-size: 13px;
+      letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px;
+    }
+    .section-head h2 {
+      font-size: clamp(32px, 4vw, 44px); font-weight: 700;
+      letter-spacing: -1px; line-height: 1.15; margin-bottom: 16px;
+    }
+    .section-head p { color: var(--text-dim); font-size: 18px; }
+
+    /* ===== FEATURES ===== */
+    .features {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .feature {
+      background: var(--bg-soft); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 28px;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+    .feature:hover { transform: translateY(-4px); border-color: var(--accent); }
+    .feature-icon {
+      width: 52px; height: 52px; background: var(--accent-soft);
+      border-radius: 14px; display: flex; align-items: center; justify-content: center;
+      font-size: 26px; margin-bottom: 20px;
+    }
+    .feature h3 { font-size: 19px; font-weight: 700; margin-bottom: 8px; }
+    .feature p { color: var(--text-dim); font-size: 15px; }
+
+    /* ===== STEPS ===== */
+    .steps {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px; position: relative;
+    }
+    .step { text-align: center; padding: 32px 24px; }
+    .step-num {
+      width: 56px; height: 56px;
+      background: linear-gradient(135deg, var(--accent) 0%, #5547D4 100%);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 24px; font-weight: 800;
+      margin: 0 auto 20px;
+      box-shadow: 0 8px 24px var(--accent-glow);
+    }
+    .step h3 { font-size: 20px; font-weight: 700; margin-bottom: 10px; }
+    .step p { color: var(--text-dim); font-size: 15px; }
+
+    /* ===== PRICING ===== */
+    .pricing {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .price-card {
+      background: var(--bg-soft); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 32px;
+      position: relative; transition: transform 0.3s;
+    }
+    .price-card.featured {
+      border-color: var(--accent); transform: scale(1.03);
+      background: linear-gradient(180deg, rgba(124, 106, 247, 0.08) 0%, transparent 100%);
+    }
+    .price-card.featured:hover { transform: scale(1.05); }
+    .price-card:not(.featured):hover { transform: translateY(-4px); }
+    .price-badge {
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      background: var(--accent); color: white;
+      font-size: 11px; font-weight: 700; letter-spacing: 1px;
+      padding: 4px 12px; border-radius: 999px; text-transform: uppercase;
+    }
+    .price-name {
+      font-size: 14px; color: var(--text-dim);
+      text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .price-amount {
+      font-size: 40px; font-weight: 800; letter-spacing: -1px;
+      margin-bottom: 4px;
+    }
+    .price-amount .period { font-size: 16px; font-weight: 500; color: var(--text-dim); }
+    .price-sub {
+      color: var(--text-dim); font-size: 14px;
+      margin-bottom: 24px; padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+    .price-features { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .price-features li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 14px; color: var(--text);
+    }
+    .price-features li::before {
+      content: '✓'; color: var(--accent); font-weight: 700; flex-shrink: 0;
+    }
+
+    /* ===== FINAL CTA ===== */
+    .final-cta {
+      text-align: center; padding: 100px 0;
+      background: radial-gradient(circle at center, var(--accent-soft), transparent 70%);
+    }
+    .final-cta h2 {
+      font-size: clamp(32px, 4vw, 48px); font-weight: 800;
+      letter-spacing: -1px; margin-bottom: 16px;
+    }
+    .final-cta p {
+      color: var(--text-dim); font-size: 18px;
+      margin-bottom: 36px; max-width: 560px;
+      margin-left: auto; margin-right: auto;
+    }
+    .play-badge {
+      display: inline-flex; align-items: center; gap: 14px;
+      background: #000; border: 1px solid #2A2A3E;
+      padding: 12px 24px; border-radius: 12px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .play-badge:hover {
+      transform: translateY(-2px); border-color: var(--accent);
+      text-decoration: none;
+    }
+    .play-badge svg { width: 28px; height: 28px; }
+    .play-badge .top { font-size: 10px; color: var(--text-dim); display: block; }
+    .play-badge .bot { font-size: 18px; font-weight: 600; color: white; }
+
+    /* ===== FOOTER ===== */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0; color: var(--text-muted);
+      font-size: 14px; text-align: center;
+    }
+    footer a { color: var(--text-dim); margin: 0 12px; }
+
+    /* Smooth transitions on language change */
+    [data-i18n], [data-i18n-html] { transition: opacity 0.15s; }
+    body.lang-changing [data-i18n],
+    body.lang-changing [data-i18n-html] { opacity: 0.5; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .hero { grid-template-columns: 1fr; padding: 60px 0; gap: 40px; }
+      .phone-mockup { width: 280px; }
+      .price-card.featured { transform: none; }
+      .price-card.featured:hover { transform: translateY(-4px); }
+      section.block { padding: 70px 0; }
+      nav .container { padding: 12px 16px; }
+      .nav-right { gap: 8px; }
+      .nav-cta { padding: 8px 14px; font-size: 13px; }
+      .lang-btn { padding: 5px 8px; font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <div class="logo">
+        <img class="logo-icon" src="landing-assets/logo.png" alt="Smart Alarm Clock" />
+        Smart Alarm Clock
+      </div>
+      <div class="nav-right">
+        <div class="lang-switch" role="group" aria-label="Language switcher">
+          <button class="lang-btn active" data-lang="it" aria-label="Italiano">🇮🇹 IT</button>
+          <button class="lang-btn" data-lang="en" aria-label="English">🇬🇧 EN</button>
+        </div>
+        <a href="https://play.google.com/store/apps/details?id=com.svegliasmart" class="nav-cta" target="_blank" rel="noopener" data-i18n="nav.cta">Scarica</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="container hero">
+    <div>
+      <span class="hero-badge" data-i18n="hero.badge">✨ Nuovo · Suoneria dal tuo dispositivo</span>
+      <h1 data-i18n-html="hero.title">La sveglia che <span class="accent">conosce le tue festività</span>.</h1>
+      <p class="lead" data-i18n="hero.lead">
+        Niente più sveglie nel giorno di Pasqua o a Ferragosto. Smart Alarm Clock riconosce
+        automaticamente le festività di 47 paesi e salta le sveglie nei giorni che non vuoi.
+      </p>
+      <div class="cta-row">
+        <a href="https://play.google.com/store/apps/details?id=com.svegliasmart" class="btn-primary" target="_blank" rel="noopener">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M3 20.5V3.5C3 2.91 3.34 2.39 3.84 2.15L13.69 12L3.84 21.85C3.34 21.6 3 21.09 3 20.5M16.81 15.12L6.05 21.34L14.54 12.85L16.81 15.12M20.16 10.81C20.5 11.08 20.75 11.5 20.75 12C20.75 12.5 20.53 12.9 20.18 13.18L17.89 14.5L15.39 12L17.89 9.5L20.16 10.81M6.05 2.66L16.81 8.88L14.54 11.15L6.05 2.66Z"/>
+          </svg>
+          <span data-i18n="hero.cta1">Scarica gratis su Google Play</span>
+        </a>
+        <a href="#features" class="btn-secondary" data-i18n="hero.cta2">Scopri come funziona</a>
+      </div>
+    </div>
+    <div>
+      <div class="phone-mockup">
+        <div class="phone-content">
+          <div class="phone-time">07:30</div>
+          <div class="phone-date" data-i18n-html="phone.date">Lunedì, 25 dicembre · 🎄 Natale</div>
+
+          <div class="alarm-card" style="opacity:.5">
+            <div>
+              <div class="alarm-time">07:30</div>
+              <div class="alarm-label">
+                <span data-i18n="phone.alarm1.label">Lavoro</span> ·
+                <span data-i18n="phone.alarm1.days">L M G V</span>
+                <span class="holiday-pill" data-i18n="phone.alarm1.skipped">saltata oggi</span>
+              </div>
+            </div>
+            <div class="toggle"></div>
+          </div>
+
+          <div class="alarm-card">
+            <div>
+              <div class="alarm-time">09:00</div>
+              <div class="alarm-label" data-i18n="phone.alarm2.label">Brunch in famiglia</div>
+            </div>
+            <div class="toggle"></div>
+          </div>
+
+          <div class="alarm-card">
+            <div>
+              <div class="alarm-time">22:15</div>
+              <div class="alarm-label" data-i18n="phone.alarm3.label">Promemoria pillole</div>
+            </div>
+            <div class="toggle off"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="container">
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-num">47</div>
+        <div class="stat-label" data-i18n="stats.countries">Paesi supportati</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">100%</div>
+        <div class="stat-label" data-i18n="stats.offline">Offline · Niente account</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">0€</div>
+        <div class="stat-label" data-i18n="stats.start">Per iniziare</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">2</div>
+        <div class="stat-label" data-i18n="stats.langs">Lingue · 🇮🇹 🇬🇧</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section class="block" id="features">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow" data-i18n="features.eyebrow">Punti di forza</div>
+        <h2 data-i18n="features.title">Una sveglia che lavora per te.</h2>
+        <p data-i18n="features.subtitle">Pensata per chi non vuole pensare alle sveglie: si configurano una volta e poi si occupano di tutto loro.</p>
+      </div>
+
+      <div class="features">
+        <div class="feature">
+          <div class="feature-icon">🌍</div>
+          <h3 data-i18n="features.f1.title">Festività automatiche</h3>
+          <p data-i18n="features.f1.desc">47 paesi supportati con calendario sempre aggiornato. La sveglia salta automaticamente nei giorni di festa.</p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">🔔</div>
+          <h3 data-i18n="features.f2.title">Pre-notifica intelligente</h3>
+          <p data-i18n="features.f2.desc">10 minuti prima della sveglia ricevi una notifica con un comodo bottone "Annulla" se non ne hai più bisogno.</p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">🎵</div>
+          <h3 data-i18n="features.f3.title">I tuoi MP3 come suoneria</h3>
+          <p data-i18n="features.f3.desc">Scegli qualsiasi file audio dal tuo dispositivo come suono della sveglia. Niente più suonerie generiche.</p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">⏭️</div>
+          <h3 data-i18n="features.f4.title">Salta singole occorrenze</h3>
+          <p data-i18n="features.f4.desc">Un giorno non ti serve? Saltala con un tap, senza disattivare l'intera sveglia ricorrente.</p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">⏰</div>
+          <h3 data-i18n="features.f5.title">Snooze personalizzabile</h3>
+          <p data-i18n="features.f5.desc">Da 1 a 60 minuti. Decidi tu quanto vuoi dormire ancora, slider preciso al minuto.</p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">🔒</div>
+          <h3 data-i18n="features.f6.title">Privacy by design</h3>
+          <p data-i18n="features.f6.desc">Niente account, niente cloud, niente tracking. I tuoi dati restano sul tuo telefono. Funziona 100% offline.</p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">🎯</div>
+          <h3 data-i18n="features.f7.title">Festività personalizzate</h3>
+          <p data-i18n="features.f7.desc">Aggiungi le tue date speciali (compleanni, anniversari, ferie) e la sveglia le rispetta.</p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">📱</div>
+          <h3 data-i18n="features.f8.title">Suona davvero</h3>
+          <p data-i18n="features.f8.desc">Schermo intero, vibrazione, suono che bypassa il volume silenzioso. Affidabile anche in modalità Non Disturbare.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="block" style="background: var(--bg-soft);">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow" data-i18n="how.eyebrow">Come funziona</div>
+        <h2 data-i18n="how.title">Tre tap e dormi sereno.</h2>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h3 data-i18n="how.s1.title">Crea la sveglia</h3>
+          <p data-i18n="how.s1.desc">Imposta orario, giorni della settimana, suoneria e label. Tutto in una schermata pulita.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h3 data-i18n="how.s2.title">Scegli il paese</h3>
+          <p data-i18n="how.s2.desc">Seleziona la tua nazione tra 47 disponibili. L'app conosce le festività e le applica.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h3 data-i18n="how.s3.title">Dormi</h3>
+          <p data-i18n="how.s3.desc">La sveglia suonerà nei giorni giusti e starà zitta nei giorni di festa. Senza fare nulla.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="block" id="pricing">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow" data-i18n="pricing.eyebrow">Piani</div>
+        <h2 data-i18n="pricing.title">Gratis per iniziare. Premium quando ti serve.</h2>
+        <p data-i18n="pricing.subtitle">Nessun abbonamento ricorrente: paghi una volta, è tuo per sempre.</p>
+      </div>
+
+      <div class="pricing">
+        <div class="price-card">
+          <div class="price-name" data-i18n="pricing.free.name">Free</div>
+          <div class="price-amount">0€</div>
+          <div class="price-sub" data-i18n="pricing.free.sub">Per sempre, senza pubblicità</div>
+          <ul class="price-features">
+            <li data-i18n="pricing.free.f1">Fino a 3 sveglie</li>
+            <li data-i18n="pricing.free.f2">1 paese a scelta</li>
+            <li data-i18n="pricing.free.f3">2 suoni base (default + silenzioso)</li>
+            <li data-i18n="pricing.free.f4">Festività automatiche</li>
+            <li data-i18n="pricing.free.f5">Snooze 5 / 10 / 15 / 20 min</li>
+          </ul>
+        </div>
+
+        <div class="price-card featured">
+          <div class="price-badge" data-i18n="pricing.badge">Più scelto</div>
+          <div class="price-name" data-i18n="pricing.premium.name">Premium</div>
+          <div class="price-amount">1,99€ <span class="period" data-i18n="pricing.once">una tantum</span></div>
+          <div class="price-sub" data-i18n="pricing.premium.sub">Sblocca tutto il potenziale</div>
+          <ul class="price-features">
+            <li data-i18n="pricing.premium.f1">Sveglie illimitate</li>
+            <li data-i18n="pricing.premium.f2">Tutti i 47 paesi</li>
+            <li data-i18n="pricing.premium.f3">6 suoneria curate + i tuoi MP3</li>
+            <li data-i18n="pricing.premium.f4">Skip illimitato delle occorrenze</li>
+            <li data-i18n="pricing.premium.f5">Snooze 5 / 10 / 15 / 20 min</li>
+            <li data-i18n="pricing.premium.f6">Festività automatiche</li>
+          </ul>
+        </div>
+
+        <div class="price-card">
+          <div class="price-name" data-i18n="pricing.plus.name">Premium Plus</div>
+          <div class="price-amount">2,99€ <span class="period" data-i18n="pricing.once">una tantum</span></div>
+          <div class="price-sub" data-i18n="pricing.plus.sub">Il pacchetto completo</div>
+          <ul class="price-features">
+            <li data-i18n="pricing.plus.f1">Tutto di Premium</li>
+            <li data-i18n="pricing.plus.f2">Festività personalizzate illimitate</li>
+            <li data-i18n="pricing.plus.f3">Snooze slider 1–60 min</li>
+            <li data-i18n="pricing.plus.f4">Tutti gli aggiornamenti futuri</li>
+            <li data-i18n="pricing.plus.f5">Supporto prioritario</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="final-cta">
+    <div class="container">
+      <img class="logo-icon-lg" src="landing-assets/logo.png" alt="Smart Alarm Clock" style="margin-bottom: 24px;" />
+      <h2 data-i18n="final.title">Inizia a dormire meglio stasera.</h2>
+      <p data-i18n="final.desc">
+        Scarica gratis Smart Alarm Clock e configura la prima sveglia in meno di un minuto.
+        Niente registrazione, niente carta di credito.
+      </p>
+      <a href="https://play.google.com/store/apps/details?id=com.svegliasmart" class="play-badge" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M3 20.5V3.5C3 2.91 3.34 2.39 3.84 2.15L13.69 12L3.84 21.85C3.34 21.6 3 21.09 3 20.5M16.81 15.12L6.05 21.34L14.54 12.85L16.81 15.12M20.16 10.81C20.5 11.08 20.75 11.5 20.75 12C20.75 12.5 20.53 12.9 20.18 13.18L17.89 14.5L15.39 12L17.89 9.5L20.16 10.81M6.05 2.66L16.81 8.88L14.54 11.15L6.05 2.66Z"/>
+        </svg>
+        <span>
+          <span class="top" data-i18n="play.top">DISPONIBILE SU</span>
+          <span class="bot">Google Play</span>
+        </span>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="logo" style="justify-content:center; margin-bottom: 12px;">
+        <img class="logo-icon" src="landing-assets/logo.png" alt="Smart Alarm Clock" />
+        Smart Alarm Clock
+      </div>
+      <p data-i18n="footer.copy">© 2026 · Sviluppato con cura in Italia</p>
+      <div style="margin-top: 12px;">
+        <a href="https://play.google.com/store/apps/details?id=com.svegliasmart" target="_blank" rel="noopener" data-i18n="footer.play">Play Store</a>
+        ·
+        <a href="https://erikvalmori-dev.github.io/smart-alarm-clock-privacy/" target="_blank" rel="noopener" data-i18n="footer.privacy">Privacy Policy</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const I18N = {
+      it: {
+        'meta.title': 'Smart Alarm Clock — La sveglia che conosce le tue festività',
+        'meta.description': 'Sveglia intelligente per Android con rilevamento automatico delle festività di 47 paesi. Niente account, niente cloud, solo la sveglia che funziona.',
+        'og.title': 'Smart Alarm Clock — La sveglia intelligente',
+        'og.description': 'Riconosce automaticamente le festività di 47 paesi e salta le sveglie nei giorni di festa. Niente account, niente cloud.',
+
+        'nav.cta': 'Scarica',
+
+        'hero.badge': '✨ Nuovo · Suoneria dal tuo dispositivo',
+        'hero.title': 'La sveglia che <span class="accent">conosce le tue festività</span>.',
+        'hero.lead': 'Niente più sveglie nel giorno di Pasqua o a Ferragosto. Smart Alarm Clock riconosce automaticamente le festività di 47 paesi e salta le sveglie nei giorni che non vuoi.',
+        'hero.cta1': 'Scarica gratis su Google Play',
+        'hero.cta2': 'Scopri come funziona',
+
+        'phone.date': 'Lunedì, 25 dicembre · 🎄 Natale',
+        'phone.alarm1.label': 'Lavoro',
+        'phone.alarm1.days': 'L M G V',
+        'phone.alarm1.skipped': 'saltata oggi',
+        'phone.alarm2.label': 'Brunch in famiglia',
+        'phone.alarm3.label': 'Promemoria pillole',
+
+        'stats.countries': 'Paesi supportati',
+        'stats.offline': 'Offline · Niente account',
+        'stats.start': 'Per iniziare',
+        'stats.langs': 'Lingue · 🇮🇹 🇬🇧',
+
+        'features.eyebrow': 'Punti di forza',
+        'features.title': 'Una sveglia che lavora per te.',
+        'features.subtitle': 'Pensata per chi non vuole pensare alle sveglie: si configurano una volta e poi si occupano di tutto loro.',
+        'features.f1.title': 'Festività automatiche',
+        'features.f1.desc': '47 paesi supportati con calendario sempre aggiornato. La sveglia salta automaticamente nei giorni di festa.',
+        'features.f2.title': 'Pre-notifica intelligente',
+        'features.f2.desc': '10 minuti prima della sveglia ricevi una notifica con un comodo bottone "Annulla" se non ne hai più bisogno.',
+        'features.f3.title': 'I tuoi MP3 come suoneria',
+        'features.f3.desc': 'Scegli qualsiasi file audio dal tuo dispositivo come suono della sveglia. Niente più suonerie generiche.',
+        'features.f4.title': 'Salta singole occorrenze',
+        'features.f4.desc': 'Un giorno non ti serve? Saltala con un tap, senza disattivare l\'intera sveglia ricorrente.',
+        'features.f5.title': 'Snooze personalizzabile',
+        'features.f5.desc': 'Da 1 a 60 minuti. Decidi tu quanto vuoi dormire ancora, slider preciso al minuto.',
+        'features.f6.title': 'Privacy by design',
+        'features.f6.desc': 'Niente account, niente cloud, niente tracking. I tuoi dati restano sul tuo telefono. Funziona 100% offline.',
+        'features.f7.title': 'Festività personalizzate',
+        'features.f7.desc': 'Aggiungi le tue date speciali (compleanni, anniversari, ferie) e la sveglia le rispetta.',
+        'features.f8.title': 'Suona davvero',
+        'features.f8.desc': 'Schermo intero, vibrazione, suono che bypassa il volume silenzioso. Affidabile anche in modalità Non Disturbare.',
+
+        'how.eyebrow': 'Come funziona',
+        'how.title': 'Tre tap e dormi sereno.',
+        'how.s1.title': 'Crea la sveglia',
+        'how.s1.desc': 'Imposta orario, giorni della settimana, suoneria e label. Tutto in una schermata pulita.',
+        'how.s2.title': 'Scegli il paese',
+        'how.s2.desc': 'Seleziona la tua nazione tra 47 disponibili. L\'app conosce le festività e le applica.',
+        'how.s3.title': 'Dormi',
+        'how.s3.desc': 'La sveglia suonerà nei giorni giusti e starà zitta nei giorni di festa. Senza fare nulla.',
+
+        'pricing.eyebrow': 'Piani',
+        'pricing.title': 'Gratis per iniziare. Premium quando ti serve.',
+        'pricing.subtitle': 'Nessun abbonamento ricorrente: paghi una volta, è tuo per sempre.',
+        'pricing.badge': 'Più scelto',
+        'pricing.once': 'una tantum',
+        'pricing.free.name': 'Free',
+        'pricing.free.sub': 'Per sempre, senza pubblicità',
+        'pricing.free.f1': 'Fino a 3 sveglie',
+        'pricing.free.f2': '1 paese a scelta',
+        'pricing.free.f3': '2 suoni base (default + silenzioso)',
+        'pricing.free.f4': 'Festività automatiche',
+        'pricing.free.f5': 'Snooze 5 / 10 / 15 / 20 min',
+        'pricing.premium.name': 'Premium',
+        'pricing.premium.sub': 'Sblocca tutto il potenziale',
+        'pricing.premium.f1': 'Sveglie illimitate',
+        'pricing.premium.f2': 'Tutti i 47 paesi',
+        'pricing.premium.f3': '6 suoneria curate + i tuoi MP3',
+        'pricing.premium.f4': 'Skip illimitato delle occorrenze',
+        'pricing.premium.f5': 'Snooze 5 / 10 / 15 / 20 min',
+        'pricing.premium.f6': 'Festività automatiche',
+        'pricing.plus.name': 'Premium Plus',
+        'pricing.plus.sub': 'Il pacchetto completo',
+        'pricing.plus.f1': 'Tutto di Premium',
+        'pricing.plus.f2': 'Festività personalizzate illimitate',
+        'pricing.plus.f3': 'Snooze slider 1–60 min',
+        'pricing.plus.f4': 'Tutti gli aggiornamenti futuri',
+        'pricing.plus.f5': 'Supporto prioritario',
+
+        'final.title': 'Inizia a dormire meglio stasera.',
+        'final.desc': 'Scarica gratis Smart Alarm Clock e configura la prima sveglia in meno di un minuto. Niente registrazione, niente carta di credito.',
+        'play.top': 'DISPONIBILE SU',
+
+        'footer.copy': '© 2026 · Sviluppato con cura in Italia',
+        'footer.play': 'Play Store',
+        'footer.privacy': 'Privacy Policy',
+      },
+      en: {
+        'meta.title': 'Smart Alarm Clock — The alarm that knows your holidays',
+        'meta.description': 'Smart alarm clock for Android with automatic holiday detection for 47 countries. No account, no cloud, just the alarm that works.',
+        'og.title': 'Smart Alarm Clock — The smart alarm',
+        'og.description': 'Automatically detects holidays in 47 countries and skips alarms on days off. No account, no cloud.',
+
+        'nav.cta': 'Download',
+
+        'hero.badge': '✨ New · Pick your own ringtone',
+        'hero.title': 'The alarm that <span class="accent">knows your holidays</span>.',
+        'hero.lead': 'No more alarms on Easter or Christmas Day. Smart Alarm Clock automatically detects holidays in 47 countries and skips alarms on the days you don\'t want.',
+        'hero.cta1': 'Get it free on Google Play',
+        'hero.cta2': 'See how it works',
+
+        'phone.date': 'Monday, Dec 25 · 🎄 Christmas',
+        'phone.alarm1.label': 'Work',
+        'phone.alarm1.days': 'M T Th F',
+        'phone.alarm1.skipped': 'skipped today',
+        'phone.alarm2.label': 'Family brunch',
+        'phone.alarm3.label': 'Medication reminder',
+
+        'stats.countries': 'Countries supported',
+        'stats.offline': 'Offline · No account',
+        'stats.start': 'To get started',
+        'stats.langs': 'Languages · 🇮🇹 🇬🇧',
+
+        'features.eyebrow': 'Why it stands out',
+        'features.title': 'An alarm that works for you.',
+        'features.subtitle': 'Built for people who don\'t want to think about alarms: set them once, they take care of the rest.',
+        'features.f1.title': 'Automatic holidays',
+        'features.f1.desc': '47 countries supported with an always-updated calendar. The alarm automatically skips holidays.',
+        'features.f2.title': 'Smart pre-notification',
+        'features.f2.desc': '10 minutes before your alarm you get a notification with a handy "Cancel" button if you no longer need it.',
+        'features.f3.title': 'Your MP3s as ringtone',
+        'features.f3.desc': 'Pick any audio file from your device as the alarm sound. No more generic ringtones.',
+        'features.f4.title': 'Skip single occurrences',
+        'features.f4.desc': 'Don\'t need it one day? Skip it with one tap, without disabling the whole recurring alarm.',
+        'features.f5.title': 'Customizable snooze',
+        'features.f5.desc': 'From 1 to 60 minutes. Decide how much more sleep you want with a minute-precise slider.',
+        'features.f6.title': 'Privacy by design',
+        'features.f6.desc': 'No account, no cloud, no tracking. Your data stays on your phone. Works 100% offline.',
+        'features.f7.title': 'Custom holidays',
+        'features.f7.desc': 'Add your special dates (birthdays, anniversaries, vacations) and the alarm will respect them.',
+        'features.f8.title': 'Actually rings',
+        'features.f8.desc': 'Full screen, vibration, sound that bypasses silent mode. Reliable even in Do Not Disturb.',
+
+        'how.eyebrow': 'How it works',
+        'how.title': 'Three taps and sleep easy.',
+        'how.s1.title': 'Create the alarm',
+        'how.s1.desc': 'Set time, days of the week, sound and label. All in one clean screen.',
+        'how.s2.title': 'Pick your country',
+        'how.s2.desc': 'Select your country from 47 available. The app knows the holidays and applies them.',
+        'how.s3.title': 'Sleep',
+        'how.s3.desc': 'The alarm will ring on the right days and stay quiet on holidays. Without doing anything.',
+
+        'pricing.eyebrow': 'Plans',
+        'pricing.title': 'Free to start. Premium when you need it.',
+        'pricing.subtitle': 'No recurring subscription: pay once, it\'s yours forever.',
+        'pricing.badge': 'Most popular',
+        'pricing.once': 'one-time',
+        'pricing.free.name': 'Free',
+        'pricing.free.sub': 'Forever, with no ads',
+        'pricing.free.f1': 'Up to 3 alarms',
+        'pricing.free.f2': '1 country of your choice',
+        'pricing.free.f3': '2 basic sounds (default + silent)',
+        'pricing.free.f4': 'Automatic holidays',
+        'pricing.free.f5': 'Snooze 5 / 10 / 15 / 20 min',
+        'pricing.premium.name': 'Premium',
+        'pricing.premium.sub': 'Unlock the full potential',
+        'pricing.premium.f1': 'Unlimited alarms',
+        'pricing.premium.f2': 'All 47 countries',
+        'pricing.premium.f3': '6 curated sounds + your MP3s',
+        'pricing.premium.f4': 'Unlimited occurrence skips',
+        'pricing.premium.f5': 'Snooze 5 / 10 / 15 / 20 min',
+        'pricing.premium.f6': 'Automatic holidays',
+        'pricing.plus.name': 'Premium Plus',
+        'pricing.plus.sub': 'The complete package',
+        'pricing.plus.f1': 'Everything in Premium',
+        'pricing.plus.f2': 'Unlimited custom holidays',
+        'pricing.plus.f3': 'Snooze slider 1–60 min',
+        'pricing.plus.f4': 'All future updates',
+        'pricing.plus.f5': 'Priority support',
+
+        'final.title': 'Start sleeping better tonight.',
+        'final.desc': 'Download Smart Alarm Clock for free and set up your first alarm in under a minute. No sign-up, no credit card.',
+        'play.top': 'AVAILABLE ON',
+
+        'footer.copy': '© 2026 · Crafted with care in Italy',
+        'footer.play': 'Play Store',
+        'footer.privacy': 'Privacy Policy',
+      },
+    };
+
+    function applyLanguage(lang) {
+      const dict = I18N[lang] || I18N.it;
+
+      // Text content
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key] !== undefined) el.textContent = dict[key];
+      });
+
+      // HTML content (e.g. H1 with nested span)
+      document.querySelectorAll('[data-i18n-html]').forEach(el => {
+        const key = el.getAttribute('data-i18n-html');
+        if (dict[key] !== undefined) el.innerHTML = dict[key];
+      });
+
+      // Attributes (meta tags etc.)
+      document.querySelectorAll('*').forEach(el => {
+        for (const attr of el.attributes) {
+          const m = attr.name.match(/^data-i18n-attr-(.+)$/);
+          if (m && dict[attr.value] !== undefined) {
+            el.setAttribute(m[1], dict[attr.value]);
+          }
+        }
+      });
+
+      // <html lang>
+      document.documentElement.lang = lang;
+
+      // Update buttons
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+      });
+
+      localStorage.setItem('preferred-lang', lang);
+    }
+
+    function detectLanguage() {
+      const saved = localStorage.getItem('preferred-lang');
+      if (saved && I18N[saved]) return saved;
+      const browser = (navigator.language || 'it').slice(0, 2).toLowerCase();
+      return I18N[browser] ? browser : 'it';
+    }
+
+    // Init
+    document.addEventListener('DOMContentLoaded', () => {
+      applyLanguage(detectLanguage());
+
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.body.classList.add('lang-changing');
+          setTimeout(() => {
+            applyLanguage(btn.dataset.lang);
+            document.body.classList.remove('lang-changing');
+          }, 150);
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
